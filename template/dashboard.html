@@ -77,41 +77,16 @@
                                   <div class="form-group text-center forgot-password">
                                     <a href="https://www.growtopiagame.com/account" target="_blank">Forgot Password</a>
                                     <br>
-                                    <a href="#" id="toggleRegister" style="margin-top: 5px; display: inline-block;">Register Account</a>
+                                    <a href="#" id="guestLogin" style="margin-top: 5px; display: inline-block;">Play as Guest</a>
                                   </div>
                                   <div class="form-group text-center">
                                     <input class="btn btn-lg btn-primary grow-button" type="submit" value="Log in">
                                   </div>
                                 </form>
-                                <form method="POST" id="registerForm" action="/player/growid/login/validate" accept-charset="UTF-8" class="hidden" role="form" autocomplete="off">
+                                <form method="POST" id="guestForm" action="/player/growid/login/validate" accept-charset="UTF-8" class="hidden" role="form" autocomplete="off">
                                   <input name="_token" type="hidden" value="{{ data }}">
-                                  <div class="form-group">
-                                    <input id="register-name" class="form-control grow-text" required="required"
-                                      placeholder="Your Growtopia Name *" name="growId" value="" type="text"
-                                      pattern="[A-Za-z0-9]+" title="Only letters and numbers are allowed">
-                                  </div>
-                                  <div class="form-group">
-                                    <input id="register-email" class="form-control grow-text" required="required"
-                                      placeholder="Your Email *" name="email" value="" type="email">
-                                  </div>
-                                  <div class="form-group">
-                                    <input id="register-password" class="form-control grow-text" required="required"
-                                      placeholder="Your Growtopia Password *" name="password" type="password" value=""
-                                      pattern="[A-Za-z0-9@._!\-]+"
-                                      title="Only letters, numbers, and @ . _ ! - are allowed">
-                                  </div>
-                                  <div class="form-group">
-                                    <input id="register-confirm-password" class="form-control grow-text" required="required"
-                                      placeholder="Confirm Password *" name="password_confirmation" type="password" value=""
-                                      pattern="[A-Za-z0-9@._!\-]+"
-                                      title="Only letters, numbers, and @ . _ ! - are allowed">
-                                  </div>
-                                  <div class="form-group text-center">
-                                    <a href="#" id="toggleLogin" style="margin-bottom: 10px; display: inline-block;">Back to Login</a>
-                                  </div>
-                                  <div class="form-group text-center">
-                                    <input class="btn btn-lg btn-primary grow-button" type="submit" value="Register">
-                                  </div>
+                                  <input name="growId" type="hidden" value="">
+                                  <input name="password" type="hidden" value="">
                                 </form>
                               </div>
                             </div>
@@ -126,25 +101,13 @@
                       <script>
                         document.addEventListener('DOMContentLoaded', function () {
                           const loginForm = document.getElementById('loginForm');
-                          const registerForm = document.getElementById('registerForm');
-                          const toggleRegister = document.getElementById('toggleRegister');
-                          const toggleLogin = document.getElementById('toggleLogin');
                           const sectionTitle = document.querySelector('.section-title h2');
 
-                          // @note toggle to register form
-                          toggleRegister.addEventListener('click', function (e) {
+                          // @note guest login — submits empty growId to server
+                          const guestLoginLink = document.getElementById('guestLogin');
+                          guestLoginLink.addEventListener('click', function (e) {
                             e.preventDefault();
-                            loginForm.classList.add('hidden');
-                            registerForm.classList.remove('hidden');
-                            sectionTitle.textContent = 'Register your Grow ID';
-                          });
-
-                          // @note toggle to login form
-                          toggleLogin.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            registerForm.classList.add('hidden');
-                            loginForm.classList.remove('hidden');
-                            sectionTitle.textContent = 'Log in with your Grow ID';
+                            document.getElementById('guestForm').submit();
                           });
 
                           // @note login form handlers
@@ -169,40 +132,7 @@
                             loginSubmitButton.value = 'Logging in...';
                           });
 
-                          // @note register form handlers
-                          const registerSubmitButton = registerForm.querySelector('input[type="submit"]');
-                          const registerNameInput = document.getElementById('register-name');
-                          const registerEmailInput = document.getElementById('register-email');
-                          const registerPasswordInput = document.getElementById('register-password');
-                          const registerConfirmPasswordInput = document.getElementById('register-confirm-password');
 
-                          registerNameInput.addEventListener('input', function (e) {
-                            this.value = this.value.replace(/[^A-Za-z0-9]/g, '');
-                          });
-
-                          registerPasswordInput.addEventListener('input', function (e) {
-                            this.value = this.value.replace(/[^A-Za-z0-9@._!\-]/g, '');
-                          });
-
-                          registerConfirmPasswordInput.addEventListener('input', function (e) {
-                            this.value = this.value.replace(/[^A-Za-z0-9@._!\-]/g, '');
-                          });
-
-                          registerForm.addEventListener('submit', function (e) {
-                            if (registerSubmitButton.disabled) {
-                              e.preventDefault();
-                              return false;
-                            }
-
-                            if (registerPasswordInput.value !== registerConfirmPasswordInput.value) {
-                              e.preventDefault();
-                              alert('Passwords do not match!');
-                              return false;
-                            }
-
-                            registerSubmitButton.disabled = true;
-                            registerSubmitButton.value = 'Registering...';
-                          });
                         });
                       </script>
                     </div>
